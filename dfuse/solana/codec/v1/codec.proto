@@ -1,0 +1,108 @@
+syntax = "proto3";
+
+package dfuse.solana.codec.v1;
+
+option go_package = "github.com/dfuse-io/dfuse-solana/pb/dfuse/solana/codec/v1;pbcodec";
+
+import "google/protobuf/timestamp.proto";
+
+message Slot {
+  string id = 1;
+  uint32 number = 2;
+  uint32 version = 3;
+
+  //  BlockHeader header = 4;
+  //uint32 dpos_irreversible_blocknum = 9;
+
+  repeated Transaction transactions = 4;
+  uint32 transaction_count = 5;
+
+  repeated TransactionTrace transaction_traces = 6;
+  uint32 transaction_trace_count = 7;
+}
+
+message Transaction {
+  string id = 1;
+  uint64 index = 2; // within the Slot / Entry?
+
+  repeated string signatures = 3;
+  Message msg = 4;
+}
+
+message Message {
+  MessageHeader header = 1;
+  repeated bytes account_keys = 2;
+  bytes recent_blockhash = 3;
+  repeated CompiledInstruction instructions = 4;
+}
+
+message MessageHeader  {
+  uint32 num_required_signatures = 1;
+  uint32 num_readonly_signed_accounts = 2;
+  uint32 num_readonly_unsigned_accounts = 3;
+}
+
+message CompiledInstruction {
+  uint32 program_id_index = 1; // u8
+  repeated uint32 accounts = 2; // Vec<u8>
+  bytes data = 3;
+}
+
+message BlockHeader {
+  google.protobuf.Timestamp timestamp = 3;
+}
+
+message TransactionTrace {
+  string id = 1;
+  uint64 index = 26;
+  uint64 slot_num = 2;
+  string slot_hash = 4;
+
+  repeated InstructionTrace instruction_traces = 10; // top-level instructions
+
+  //repeated CreationFlatNode creation_tree = 25;
+}
+
+/**
+
+- instr1 (id=1, parent=0)
+- instr2 (id=2, parent=0) (pubkey1 is writable)
+  - instr3 (id=3, parent=2) (pubkey1 is writable)
+     - instr4 (id=4, parent=3) (pubkey1 is writable)
+        - instr5 (id=5, parent=4) (pubkey1 is writable, mutates pubkey1)
+       collect delta of pubkey1
+     collect delta of pubkey1 ONLY IF CHANGED AGAIN, from last time we took a snapshot of it.
+  collect delta of pubkey1
+- instr6 (id=6, parent=0)
+
+ */
+
+message InstructionTrace {
+  bytes program_id = 1;
+  repeated bytes account_pubkeys = 3; // eventually make it an index..
+  bytes instruction_data = 2;  // 00030000001100 -> crank for Serum
+
+  uint32 depth = 4;
+  uint32 ordinal = 6; // for this instruction
+  uint32 parent_ordinal = 5;
+
+  repeated BalanceChange balance_changes = 7;
+  repeated AccountChange account_changes = 8;
+}
+
+message BalanceChange {
+  bytes pubkey = 1;
+  uint64 prev_lamports = 2;
+  uint64 new_lamports = 3;
+}
+
+message AccountChange {
+  bytes pubkey = 1;
+  bytes prev_data = 2;
+  bytes new_data = 3;
+}
+
+message CreationFlatNode {
+  int32 creator_action_index = 1;
+  uint32 execution_action_index = 2;
+}
