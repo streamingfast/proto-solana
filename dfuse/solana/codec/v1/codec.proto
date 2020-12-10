@@ -8,17 +8,17 @@ import "google/protobuf/timestamp.proto";
 
 message Slot {
   string id = 1;
-  uint64 number = 2;
-  uint64 version = 3;
+  uint32 number = 2;
+  uint32 version = 3;
 
   //  BlockHeader header = 4;
-  //uint64 dpos_irreversible_blocknum = 9;
+  //uint32 dpos_irreversible_blocknum = 9;
 
   repeated Transaction transactions = 4;
-  uint64 transaction_count = 5;
+  uint32 transaction_count = 5;
 
   repeated TransactionTrace transaction_traces = 6;
-  uint64 transaction_trace_count = 7;
+  uint32 transaction_trace_count = 7;
 }
 
 message Transaction {
@@ -37,14 +37,14 @@ message Message {
 }
 
 message MessageHeader  {
-  uint64 num_required_signatures = 1;
-  uint64 num_readonly_signed_accounts = 2;
-  uint64 num_readonly_unsigned_accounts = 3;
+  uint32 num_required_signatures = 1;
+  uint32 num_readonly_signed_accounts = 2;
+  uint32 num_readonly_unsigned_accounts = 3;
 }
 
 message CompiledInstruction {
-  uint64 program_id_index = 1; // u8
-  repeated uint64 accounts = 2; // Vec<u8>
+  uint32 program_id_index = 1; // u8
+  repeated uint32 accounts = 2; // Vec<u8>
   bytes data = 3;
 }
 
@@ -82,9 +82,9 @@ message InstructionTrace {
   repeated bytes account_pubkeys = 3; // eventually make it an index..
   bytes instruction_data = 2;  // 00030000001100 -> crank for Serum
 
-  uint64 depth = 4;
-  uint64 ordinal = 6; // for this instruction
-  uint64 parent_ordinal = 5;
+  uint32 depth = 4;
+  uint32 ordinal = 6; // for this instruction
+  uint32 parent_ordinal = 5;
 
   repeated BalanceChange balance_changes = 7;
   repeated AccountChange account_changes = 8;
@@ -103,6 +103,6 @@ message AccountChange {
 }
 
 message CreationFlatNode {
-  int64 creator_action_index = 1;
-  uint64 execution_action_index = 2;
+  int32 creator_action_index = 1;
+  uint32 execution_action_index = 2;
 }
