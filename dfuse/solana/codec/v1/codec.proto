@@ -78,11 +78,10 @@ message TransactionTrace {
  */
 
 message InstructionTrace {
-  bytes program_id = 1;
+  string program_id = 1;
   repeated bytes account_pubkeys = 3; // eventually make it an index..
-  bytes instruction_data = 2;  // 00030000001100 -> crank for Serum
+  bytes data = 2;  // 00030000001100 -> crank for Serum
 
-  uint32 depth = 4;
   uint32 ordinal = 6; // for this instruction
   uint32 parent_ordinal = 5;
 
@@ -91,13 +90,13 @@ message InstructionTrace {
 }
 
 message BalanceChange {
-  bytes pubkey = 1;
+  string pubkey = 1;
   uint64 prev_lamports = 2;
   uint64 new_lamports = 3;
 }
 
 message AccountChange {
-  bytes pubkey = 1;
+  string pubkey = 1;
   bytes prev_data = 2;
   bytes new_data = 3;
 }
