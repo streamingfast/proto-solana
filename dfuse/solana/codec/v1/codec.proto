@@ -7,18 +7,28 @@ option go_package = "github.com/dfuse-io/dfuse-solana/pb/dfuse/solana/codec/v1;p
 import "google/protobuf/timestamp.proto";
 
 message Slot {
-  string id = 1;
-  uint32 number = 2;
-  uint32 version = 3;
+  string id = 1; // hash of the last Entry closing the slot
+  uint64 number = 2; // slot number, not block number
+  string previous_id = 3; // corresponds to the previous SLOT hash
+  uint32 version = 4;
+  uint64 root_slot_num = 5; // the root at the current stage in the validator node
+  Block block = 6; // optional Block here
 
-  //  BlockHeader header = 4;
-  //uint32 dpos_irreversible_blocknum = 9;
+  google.protobuf.Timestamp cluster_wallclock = 11;
 
-  repeated Transaction transactions = 4;
-  uint32 transaction_count = 5;
+  repeated Transaction transactions = 7;
+  uint32 transaction_count = 8;
 
-  repeated TransactionTrace transaction_traces = 6;
-  uint32 transaction_trace_count = 7;
+  repeated TransactionTrace transaction_traces = 9;
+  uint32 transaction_trace_count = 10;
+}
+
+message Block {
+  string id = 1;  // corresponds to the Slot id (or hash)
+  uint64 number = 2; // corresponds to the Slot number for this block
+  uint64 block_height = 3;
+  string previous_id = 4; // corresponds to the previous_blockhash, might skip some slots, so beware
+  uint64 previous_block_slot = 5;
 }
 
 message Transaction {
@@ -48,19 +58,15 @@ message CompiledInstruction {
   bytes data = 3;
 }
 
-message BlockHeader {
-  google.protobuf.Timestamp timestamp = 3;
-}
-
 message TransactionTrace {
   string id = 1;
-  uint64 index = 26;
-  uint64 slot_num = 2;
+  uint64 index = 2;
+  uint64 slot_num = 3;
   string slot_hash = 4;
 
-  repeated InstructionTrace instruction_traces = 10; // top-level instructions
+  repeated string log_messages = 5;
 
-  //repeated CreationFlatNode creation_tree = 25;
+  repeated InstructionTrace instruction_traces = 6; // top-level instructions
 }
 
 /**
@@ -79,10 +85,10 @@ message TransactionTrace {
 
 message InstructionTrace {
   string program_id = 1;
-  repeated bytes account_pubkeys = 3; // eventually make it an index..
-  bytes data = 2;  // 00030000001100 -> crank for Serum
+  repeated bytes account_pubkeys = 2; // eventually make it an index..
+  bytes data = 3;  // 00030000001100 -> crank for Serum
 
-  uint32 ordinal = 6; // for this instruction
+  uint32 ordinal = 4; // for this instruction
   uint32 parent_ordinal = 5;
 
   repeated BalanceChange balance_changes = 7;
@@ -99,9 +105,4 @@ message AccountChange {
   string pubkey = 1;
   bytes prev_data = 2;
   bytes new_data = 3;
-}
-
-message CreationFlatNode {
-  int32 creator_action_index = 1;
-  uint32 execution_action_index = 2;
 }
