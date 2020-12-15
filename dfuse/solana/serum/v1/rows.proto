@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package dfuse.solana.serum.v1;
+
+option go_package = "github.com/dfuse-io/dfuse-solana/pb/dfuse/solana/serum/v1;pbserum";
+
+message Fill {
+  bytes pubkey = 1;
+  uint64 order_id = 2;
+  // Side, if false, then is_bid
+  bool is_ask = 3;
+  bool maker = 4;
+  uint64 native_qty_paid = 5;
+  uint64 native_qty_received = 6;
+  uint64 native_fee_or_rebate = 7;
+  string fee_tier = 8; // an ENUM some day?
+}
