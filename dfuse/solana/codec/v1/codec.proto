@@ -14,13 +14,11 @@ message Slot {
   uint64 root_slot_num = 5; // the root at the current stage in the validator node
   Block block = 6; // optional Block here
 
-  google.protobuf.Timestamp cluster_wallclock = 11;
+  uint64 genesis_unix_timestamp = 9;
+  uint64 clock_unix_timestamp = 10;
 
   repeated Transaction transactions = 7;
   uint32 transaction_count = 8;
-
-  repeated TransactionTrace transaction_traces = 9;
-  uint32 transaction_trace_count = 10;
 }
 
 message Block {
@@ -32,18 +30,32 @@ message Block {
 }
 
 message Transaction {
+  // The transaction ID corresponds to the _first_
+  // signature. Additional signatures are in `additional_signatures`.
   string id = 1;
-  uint64 index = 2; // within the Slot / Entry?
 
-  repeated string signatures = 3;
-  Message msg = 4;
-}
+  // slot_num could be zero for non-executed transactions
+  uint64 slot_num = 2;
+  // slot_hash could be empty for non-executed transactions
+  string slot_hash = 3;
 
-message Message {
-  MessageHeader header = 1;
-  repeated bytes account_keys = 2;
-  bytes recent_blockhash = 3;
-  repeated CompiledInstruction instructions = 4;
+  // Index from within a single Slot, deterministically ordered to the
+  // best of our ability using the transaction ID as a sort key for
+  // the batch of transactions executed in parallel.
+  uint64 index = 4;
+
+  repeated string additional_signatures = 5;
+
+  MessageHeader header = 6;
+  // From the original Message object
+  repeated string account_keys = 7;
+  // From the original Message object
+  string recent_blockhash = 8;
+
+  // What follows Once executed these can be set:
+  repeated string log_messages = 12;
+  // Instructions, containing both top-level and nested transactions
+  repeated Instruction instructions = 13;
 }
 
 message MessageHeader  {
@@ -52,22 +64,6 @@ message MessageHeader  {
   uint32 num_readonly_unsigned_accounts = 3;
 }
 
-message CompiledInstruction {
-  uint32 program_id_index = 1; // u8
-  repeated uint32 accounts = 2; // Vec<u8>
-  bytes data = 3;
-}
-
-message TransactionTrace {
-  string id = 1;
-  uint64 index = 2;
-  uint64 slot_num = 3;
-  string slot_hash = 4;
-
-  repeated string log_messages = 5;
-
-  repeated InstructionTrace instruction_traces = 6; // top-level instructions
-}
 
 /**
 
@@ -83,16 +79,19 @@ message TransactionTrace {
 
  */
 
-message InstructionTrace {
-  string program_id = 1;
-  repeated bytes account_pubkeys = 2; // eventually make it an index..
-  bytes data = 3;  // 00030000001100 -> crank for Serum
+message Instruction {
+  string program_id = 3;
+  repeated string account_keys = 4;
+  bytes data = 5;
 
-  uint32 ordinal = 4; // for this instruction
-  uint32 parent_ordinal = 5;
+  // What follows is execution trace data, could be empty for un-executed transactions.
 
-  repeated BalanceChange balance_changes = 7;
-  repeated AccountChange account_changes = 8;
+  uint32 ordinal = 6;
+  uint32 parent_ordinal = 7;
+  uint32 depth = 8;
+
+  repeated BalanceChange balance_changes = 9;
+  repeated AccountChange account_changes = 10;
 }
 
 message BalanceChange {
@@ -105,4 +104,5 @@ message AccountChange {
   string pubkey = 1;
   bytes prev_data = 2;
   bytes new_data = 3;
+  uint64 new_data_length = 4;
 }
