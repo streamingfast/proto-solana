@@ -17,3 +17,8 @@ message GetFillsRequest {
 message FillsResponse {
   repeated dfuse.solana.serum.v1.Fill fill = 1;
 }
+
+message Checkpoint {
+  uint64 last_written_slot_num = 1;
+  string last_written_lost_id = 2;
+}
