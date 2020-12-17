@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package dfuse.eosio.accounthist.v1;
+option go_package = "github.com/dfuse-io/dfuse-eosio/pb/dfuse/eosio/accounthist/v1;pbaccounthist";
+
+import "dfuse/solana/serum/v1/rows.proto";
+
+service SerumHistory {
+  rpc GetFills(GetFillsRequest) returns (FillsResponse);
+}
+
+message GetFillsRequest {
+  string pubkey = 1;
+  string market = 2;
+}
+
+message FillsResponse {
+  repeated dfuse.solana.serum.v1.Fill fill = 1;
+}
