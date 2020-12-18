@@ -3,22 +3,47 @@ syntax = "proto3";
 package dfuse.solana.serumhist.v1;
 option go_package = "github.com/dfuse-io/dfuse-solana/pb/dfuse/solana/serumhist/v1;pbserumhist";
 
-import "dfuse/solana/serum/v1/rows.proto";
-
 service SerumHistory {
   rpc GetFills(GetFillsRequest) returns (FillsResponse);
 }
 
 message GetFillsRequest {
-  string trader = 1;
-  string market = 2;
+  bytes trader = 1;
+  bytes market = 2;
 }
 
 message FillsResponse {
-  repeated dfuse.solana.serum.v1.Fill fill = 1;
+  repeated Fill fill = 1;
 }
 
 message Checkpoint {
   uint64 last_written_slot_num = 1;
   string last_written_lost_id = 2;
+}
+
+
+message Fill {
+  bytes trader = 1;
+  bytes order_id = 2;
+  Side side = 3;
+  bool maker = 4;
+  uint64 native_qty_paid = 5;
+  uint64 native_qty_received = 6;
+  uint64 native_fee_or_rebate = 7;
+  FeeTier fee_tier = 8;
+}
+
+enum Side {
+  BID = 0;
+  ASK = 1;
+}
+
+enum FeeTier {
+    Base = 0;
+    SRM2 = 1;
+    SRM3 = 2;
+    SRM4 = 3;
+    SRM5 = 4;
+    SRM6 = 5;
+    MSRM = 6;
 }
