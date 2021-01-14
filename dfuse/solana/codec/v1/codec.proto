@@ -8,14 +8,10 @@ message Slot {
   uint64 number = 2; // slot number, not block number
   string previous_id = 3; // corresponds to the previous SLOT hash
   uint32 version = 4;
-  Block block = 6;
+  Block block = 5;
 
   repeated Transaction transactions = 7;
   uint32 transaction_count = 8;
-
-  uint64 genesis_unix_timestamp = 9;
-  uint64 clock_unix_timestamp = 10;
-
 }
 
 message Block {
@@ -24,6 +20,8 @@ message Block {
   uint64 height = 3;
   string previous_id = 4; // corresponds to the previous_blockhash, might skip some slots, so beware
   uint64 previous_block_slot = 5;
+  uint64 genesis_unix_timestamp = 6;
+  uint64 clock_unix_timestamp = 7;
 }
 
 message Batch {
