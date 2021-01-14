@@ -8,11 +8,7 @@ message Slot {
   uint64 number = 2; // slot number, not block number
   string previous_id = 3; // corresponds to the previous SLOT hash
   uint32 version = 4;
-  uint64 root_slot_num = 5; // the root at the current stage in the validator node
-  Block block = 6; // optional Block here
-
-  uint64 genesis_unix_timestamp = 9;
-  uint64 clock_unix_timestamp = 10;
+  Block block = 5;
 
   repeated Transaction transactions = 7;
   uint32 transaction_count = 8;
@@ -21,9 +17,11 @@ message Slot {
 message Block {
   string id = 1;  // corresponds to the Slot id (or hash)
   uint64 number = 2; // corresponds to the Slot number for this block
-  uint64 block_height = 3;
+  uint64 height = 3;
   string previous_id = 4; // corresponds to the previous_blockhash, might skip some slots, so beware
   uint64 previous_block_slot = 5;
+  uint64 genesis_unix_timestamp = 6;
+  uint64 clock_unix_timestamp = 7;
 }
 
 message Batch {
@@ -67,7 +65,6 @@ message MessageHeader  {
 
 
 /**
-
 - instr1 (id=1, parent=0)
 - instr2 (id=2, parent=0) (pubkey1 is writable)
   - instr3 (id=3, parent=2) (pubkey1 is writable)
@@ -77,7 +74,6 @@ message MessageHeader  {
      collect delta of pubkey1 ONLY IF CHANGED AGAIN, from last time we took a snapshot of it.
   collect delta of pubkey1
 - instr6 (id=6, parent=0)
-
  */
 
 message Instruction {
