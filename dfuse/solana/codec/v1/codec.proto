@@ -26,6 +26,10 @@ message Block {
   uint64 previous_block_slot = 5;
 }
 
+message Batch {
+  repeated Transaction transactions = 1;
+}
+
 message Transaction {
   // The transaction ID corresponds to the _first_
   // signature. Additional signatures are in `additional_signatures`.
