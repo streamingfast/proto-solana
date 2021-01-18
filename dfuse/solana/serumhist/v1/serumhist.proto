@@ -8,8 +8,8 @@ service SerumHistory {
 }
 
 message GetFillsRequest {
-  bytes trader = 1;
-  bytes market = 2;
+  string trader = 1;
+  string market = 2;
 }
 
 message FillsResponse {
@@ -23,8 +23,8 @@ message Checkpoint {
 
 
 message Fill {
-  bytes trader = 1;
-  bytes order_id = 2;
+  string trader = 1;
+  string order_id = 2;
   Side side = 3;
   bool maker = 4;
   uint64 native_qty_paid = 5;
