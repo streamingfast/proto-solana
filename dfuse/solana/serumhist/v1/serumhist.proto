@@ -3,6 +3,8 @@ syntax = "proto3";
 package dfuse.solana.serumhist.v1;
 option go_package = "github.com/dfuse-io/dfuse-solana/pb/dfuse/solana/serumhist/v1;pbserumhist";
 
+import "google/protobuf/timestamp.proto";
+
 service SerumHistory {
   rpc GetFills(GetFillsRequest) returns (FillsResponse);
 }
@@ -25,13 +27,15 @@ message Checkpoint {
 
 message Fill {
   string trader = 1;
-  string order_id = 2;
-  Side side = 3;
-  bool maker = 4;
-  uint64 native_qty_paid = 5;
-  uint64 native_qty_received = 6;
-  uint64 native_fee_or_rebate = 7;
-  FeeTier fee_tier = 8;
+  string market = 2;
+  string order_id = 3;
+  Side side = 4;
+  bool maker = 5;
+  uint64 native_qty_paid = 6;
+  uint64 native_qty_received = 7;
+  uint64 native_fee_or_rebate = 8;
+  FeeTier fee_tier = 9;
+  google.protobuf.Timestamp timestamp = 10;
 }
 
 enum Side {
