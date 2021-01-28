@@ -14,6 +14,7 @@ message GetFillsRequest {
 
 message FillsResponse {
   repeated Fill fill = 1;
+  bool has_more = 2;
 }
 
 message Checkpoint {
