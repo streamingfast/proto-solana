@@ -13,8 +13,8 @@ message Slot {
   repeated Transaction transactions = 7;
   uint32 transaction_count = 8;
 
-  bool has_compacted_account_changes = 9;
-  string compacted_account_changes_file_ref = 10;
+  bool has_split_account_changes = 9;
+  string account_changes_file_ref = 10;
 }
 
 message Block {
@@ -31,7 +31,7 @@ message Batch {
   repeated Transaction transactions = 1;
 }
 
-// 0(1) access
+// Bundled in separate files, referenced by `account_changes_file_ref`
 message AccountChangesBundle {
   // Maps to the index of the `repeated` field for Block::transactions
   repeated AccountChangesPerTrxIndex transactions = 1;
@@ -47,19 +47,6 @@ message AccountChangesPerInstruction {
   // Data to be put in Instruction::account_changes
   repeated AccountChange changes = 1;
 }
-
-// 0(n) map creation, 0(1) access
-//   or
-// 0(n) * 0(n) access
-// message AccountChangesBundle {
-//   repeated AccountChangeWrapper account_changes_wrapper = 1;
-// }
-
-// message AccountChangeWrapper {
-//   uint64 trx_index = 1;
-//   uint64 instruction_index = 2;
-//   repeated AccountChange account_changes = 3;
-// }
 
 message Transaction {
   // The transaction ID corresponds to the _first_
