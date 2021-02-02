@@ -19,9 +19,9 @@ message FillsResponse {
   bool has_more = 2;
 }
 
-message Checkpoint {
+message Checkpoint {gst
   uint64 last_written_slot_num = 1;
-  string last_written_lost_id = 2;
+  string last_written_slot_id = 2;
 }
 
 
