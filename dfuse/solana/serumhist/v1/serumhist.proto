@@ -36,6 +36,11 @@ message Fill {
   uint64 native_fee_or_rebate = 8;
   FeeTier fee_tier = 9;
   google.protobuf.Timestamp timestamp = 10;
+
+  uint64 slot_num = 20;
+  uint32 trx_idx = 21;
+  uint32 inst_idx = 22;
+  uint64 order_seq_num = 23;
 }
 
 enum Side {
