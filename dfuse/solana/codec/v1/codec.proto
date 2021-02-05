@@ -25,6 +25,7 @@ message Block {
   uint64 previous_block_slot = 5;
   uint64 genesis_unix_timestamp = 6;
   uint64 clock_unix_timestamp = 7;
+  uint64 root_num = 8;
 }
 
 message Batch {
