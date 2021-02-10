@@ -39,9 +39,11 @@ message AccountChangesBundle {
 }
 
 message AccountChangesPerTrxIndex {
+  string TrxId = 1;
+
   // Maps to the index within the `repeated` field of the proto for
   // Transaction::instructions
-  repeated AccountChangesPerInstruction instructions = 1;
+  repeated AccountChangesPerInstruction instructions = 2;
 }
 
 message AccountChangesPerInstruction {
