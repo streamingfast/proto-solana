@@ -7,6 +7,7 @@ import "google/protobuf/timestamp.proto";
 
 service SerumHistory {
   rpc GetFills(GetFillsRequest) returns (FillsResponse);
+  rpc TrackOrder(TrackOrderRequest) returns (stream OrderState);
 }
 
 message GetFillsRequest {
@@ -19,11 +20,49 @@ message FillsResponse {
   bool has_more = 2;
 }
 
+message TrackOrderRequest {
+  string market = 1;
+  uint64 order_id = 2;
+}
+
+message OrderState {
+  State previous_state = 1;
+  State current_state = 2;
+  Transition transition = 3;
+  Order order = 4;
+  Fill fill = 5;
+  InstructionInfo inst_info = 6;
+
+ enum State {
+     STATE_UNKNOWN = 0;
+     STATE_APPROVED = 1;
+     STATE_CANCEL_PENDING = 2;
+     STATE_CANCELLED = 3;
+     STATE_PARTIAL = 4;
+     STATE_EXECUTED = 5;
+ }
+ enum Transition {
+     TRANS_ACCEPTED = 0;
+     TRANS_PENDING_CANCELLATION = 1;
+     TRANS_CANCELLED = 2;
+     TRANS_FILLED = 3;
+     TRANS_EXECUTED = 4;
+ }
+}
+
+message InstructionInfo {
+  uint64 slot_num = 1;
+  string trx_hash = 2;
+  uint64 trx_idx = 3;
+  uint64 inst_idx = 4;
+  string slot_hash = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
 message Checkpoint {
   uint64 last_written_slot_num = 1;
   string last_written_slot_id = 2;
 }
-
 
 message Fill {
   string trader = 1;
@@ -38,6 +77,8 @@ message Fill {
   google.protobuf.Timestamp timestamp = 10;
 
   uint64 slot_num = 20;
+  string slot_hash = 24;
+  string trx_id = 25;
   uint32 trx_idx = 21;
   uint32 inst_idx = 22;
   uint64 order_seq_num = 23;
@@ -56,4 +97,22 @@ enum FeeTier {
     SRM5 = 4;
     SRM6 = 5;
     MSRM = 6;
+}
+
+message Order {
+  string id = 1;
+  string market = 2;
+  string trader = 3;
+
+  Side side = 4;
+  uint64 limit_price = 5;
+  uint64 max_quantity = 6;
+
+  OrderType type = 7;
+}
+
+enum OrderType {
+  LIMIT = 0;
+  IMMEDIATE_OR_CANCEL = 1;
+  POST_ONLY = 2;
 }
