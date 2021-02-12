@@ -114,6 +114,12 @@ message Order {
   uint64 max_quantity = 6;
 
   OrderType type = 7;
+
+  uint64 slot_num = 20;
+  string slot_hash = 24;
+  string trx_id = 25;
+  uint32 trx_idx = 21;
+  uint32 inst_idx = 22;
 }
 
 enum OrderType {
