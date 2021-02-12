@@ -5,9 +5,13 @@ option go_package = "github.com/dfuse-io/dfuse-solana/pb/dfuse/solana/serumhist/
 
 import "google/protobuf/timestamp.proto";
 
+
+service SerumOrderTracker {
+  rpc TrackOrder(TrackOrderRequest) returns (stream OrderTransition);
+}
+
 service SerumHistory {
   rpc GetFills(GetFillsRequest) returns (FillsResponse);
-  rpc TrackOrder(TrackOrderRequest) returns (stream OrderTransition);
 }
 
 message GetFillsRequest {
