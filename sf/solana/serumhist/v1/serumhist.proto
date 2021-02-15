@@ -35,7 +35,7 @@ message OrderTransition {
   Transition transition = 3;
   Order order = 4;
   Fill added_fill = 5;
-  SerumTemporal cancellation = 6;
+  InstructionRef cancellation = 6;
 
  enum State {
      STATE_UNKNOWN = 0;
@@ -49,14 +49,13 @@ message OrderTransition {
  enum Transition {
      TRANS_INIT = 0;
      TRANS_ACCEPTED = 1;
-     TRANS_PENDING_CANCELLATION = 2;
-     TRANS_CANCELLED = 3;
-     TRANS_FILLED = 4;
-     TRANS_EXECUTED = 5;
+     TRANS_CANCELLED = 2;
+     TRANS_FILLED = 3;
+     TRANS_EXECUTED = 4;
  }
 }
 
-message SerumTemporal {
+message InstructionRef {
   uint64 slot_num = 1;
   string trx_hash = 2;
   uint32 trx_idx = 3;
