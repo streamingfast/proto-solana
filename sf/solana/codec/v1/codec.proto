@@ -12,6 +12,7 @@ message Slot {
   string previous_id = 3; // corresponds to the previous SLOT hash
   uint32 version = 4;
   Block block = 5;
+  string last_entry_hash = 6;
 
   repeated Transaction transactions = 7;
   uint32 transaction_count = 8;
@@ -83,7 +84,7 @@ message Transaction {
   repeated Instruction instructions = 13;
 
   bool failed = 15;
-  TransactionError error = 16;
+  TransactionError errors = 16;
 }
 
 message MessageHeader  {
