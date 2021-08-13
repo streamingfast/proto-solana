@@ -1,6 +1,6 @@
-# `dfuse` for Solana protobuf definitions
+# Solana on StreamingFast protobuf definitions
 
-This repository holds protocol buffer definition files (`.proto`) for dfuse for Solana products.
+This repository holds protocol buffer definition files (`.proto`) for StreamingFast for Solana products.
 
 ## Usage
 
@@ -13,10 +13,10 @@ generate the source files for your language.
 Issues and PR in this repo related strictly to the Solana protobuf definitions.
 
 Report any protocol-specific issues in their
-[respective repositories](https://github.com/dfuse-io/dfuse#protocols)
+[respective repositories](https://github.com/streamingfast/streamingfast#protocols)
 
 Please first refer to the general
-[dfuse contribution guide](https://github.com/dfuse-io/dfuse/blob/master/CONTRIBUTING.md),
+[dfuse contribution guide](https://github.com/streamingfast/streamingfast/blob/master/CONTRIBUTING.md),
 if you wish to contribute to this code base.
 
 ## License
