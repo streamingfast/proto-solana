@@ -1,7 +1,8 @@
 syntax = "proto3";
 
-package dfuse.solana.codec.v1;
-option go_package = "github.com/dfuse-io/dfuse-solana/pb/dfuse/solana/codec/v1;pbcodec";
+package sf.solana.codec.v1;
+
+option go_package = "github.com/streamingfast/sf-solana/pb/sf/solana/codec/v1;pbcodec";
 
 message Slot {
   string id = 1; // hash of the last Entry closing the slot

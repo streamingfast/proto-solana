@@ -1,7 +1,7 @@
 syntax = "proto3";
 
-package dfuse.solana.serumhist.v1;
-option go_package = "github.com/dfuse-io/dfuse-solana/pb/dfuse/solana/serumhist/v1;pbserumhist";
+package sf.solana.serumhist.v1;
+option go_package = "github.com/streamingfast/sf-solana/pb/sf/solana/serumhist/v1;pbserumhist";
 
 import "google/protobuf/timestamp.proto";
 
@@ -23,7 +23,6 @@ message Checkpoint {
   uint64 last_written_slot_num = 1;
   string last_written_slot_id = 2;
 }
-
 
 message Fill {
   string trader = 1;
