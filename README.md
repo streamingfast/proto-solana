@@ -1,6 +1,6 @@
 # Solana on StreamingFast protobuf definitions
 
-This repository holds protocol buffer definition files (`.proto`) for StreamingFast for Solana products.
+This repository holds protocol buffer definition files (`.proto`) for Solana on StreamingFast products.
 
 ## Usage
 
