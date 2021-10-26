@@ -135,6 +135,8 @@ message AccountChange {
   bytes prev_data = 2;
   bytes new_data = 3;
   uint64 new_data_length = 4;
+  bytes diff_data = 5;
+  uint64 diff_data_length = 6;
 }
 
 message TransactionError {
