@@ -6,30 +6,23 @@ option go_package = "github.com/streamingfast/sf-solana/pb/sf/solana/codec/v1;pb
 
 import "google/protobuf/any.proto";
 
-message Slot {
-  string id = 1; // hash of the last Entry closing the slot
-  uint64 number = 2; // slot number, not block number
-  string previous_id = 3; // corresponds to the previous SLOT hash
-  uint32 version = 4;
-  Block block = 5;
-  string last_entry_hash = 6;
-
-  repeated Transaction transactions = 7;
-  uint32 transaction_count = 8;
-
-  bool has_split_account_changes = 9;
-  string account_changes_file_ref = 10;
-}
-
 message Block {
   string id = 1;  // corresponds to the Slot id (or hash)
   uint64 number = 2; // corresponds to the Slot number for this block
-  uint64 height = 3;
+  uint32 version = 3;
   string previous_id = 4; // corresponds to the previous_blockhash, might skip some slots, so beware
-  uint64 previous_block_slot = 5;
+  uint64 previous_block = 5;
   uint64 genesis_unix_timestamp = 6;
   uint64 clock_unix_timestamp = 7;
   uint64 root_num = 8;
+
+  string last_entry_hash = 9;
+
+  repeated Transaction transactions = 10;
+  uint32 transaction_count = 11;
+
+  bool has_split_account_changes = 12;
+  string account_changes_file_ref = 13;
 }
 
 message Batch {
@@ -60,31 +53,26 @@ message Transaction {
   // signature. Additional signatures are in `additional_signatures`.
   string id = 1;
 
-  // slot_num could be zero for non-executed transactions
-  uint64 slot_num = 2;
-  // slot_hash could be empty for non-executed transactions
-  string slot_hash = 3;
-
   // Index from within a single Slot, deterministically ordered to the
   // best of our ability using the transaction ID as a sort key for
   // the batch of transactions executed in parallel.
-  uint64 index = 4;
+  uint64 index = 2;
 
-  repeated string additional_signatures = 5;
+  repeated string additional_signatures = 3;
 
-  MessageHeader header = 6;
+  MessageHeader header = 4;
   // From the original Message object
-  repeated string account_keys = 7;
+  repeated string account_keys = 5;
   // From the original Message object
-  string recent_blockhash = 8;
+  string recent_blockhash = 6;
 
   // What follows Once executed these can be set:
-  repeated string log_messages = 12;
+  repeated string log_messages = 7;
   // Instructions, containing both top-level and nested transactions
-  repeated Instruction instructions = 13;
+  repeated Instruction instructions = 8;
 
-  bool failed = 15;
-  TransactionError errors = 16;
+  bool failed = 9;
+  TransactionError error = 10;
 }
 
 message MessageHeader  {
