@@ -15,8 +15,8 @@ service SerumHistory {
 }
 
 message GetFillsRequest {
-  string trader = 1;
-  string market = 2;
+  bytes trader = 1;
+  bytes market = 2;
 }
 
 message FillsResponse {
@@ -25,8 +25,8 @@ message FillsResponse {
 }
 
 message TrackOrderRequest {
-  string market = 1;
-  uint64 order_id = 2;
+  bytes market = 1;
+  string order_id = 2;
 }
 
 message OrderTransition {
@@ -56,22 +56,22 @@ message OrderTransition {
 }
 
 message InstructionRef {
-  uint64 slot_num = 1;
-  string trx_hash = 2;
+  uint64 block_num = 1;
+  bytes trx_id = 2;
   uint32 trx_idx = 3;
   uint32 inst_idx = 4;
-  string slot_hash = 5;
+  bytes block_id = 5;
   google.protobuf.Timestamp timestamp = 6;
 }
 
 message Checkpoint {
-  uint64 last_written_slot_num = 1;
-  string last_written_slot_id = 2;
+  uint64 last_written_block_num = 1;
+  bytes last_written_block_id = 2;
 }
 
 message Fill {
-  string trader = 1;
-  string market = 2;
+  bytes trader = 1;
+  bytes market = 2;
   string order_id = 3;
   Side side = 4;
   bool maker = 5;
@@ -81,9 +81,9 @@ message Fill {
   FeeTier fee_tier = 9;
   google.protobuf.Timestamp timestamp = 10;
 
-  uint64 slot_num = 20;
-  string slot_hash = 24;
-  string trx_id = 25;
+  uint64 block_num = 20;
+  bytes block_id = 24;
+  bytes trx_id = 25;
   uint32 trx_idx = 21;
   uint32 inst_idx = 22;
   uint64 order_seq_num = 23;
@@ -106,8 +106,8 @@ enum FeeTier {
 
 message Order {
   uint64 num = 1;
-  string market = 2;
-  string trader = 3;
+  bytes market = 2;
+  bytes trader = 3;
 
   Side side = 4;
   uint64 limit_price = 5;
@@ -117,9 +117,9 @@ message Order {
 
   repeated Fill fills = 10; // this only gets populated for transport
 
-  uint64 slot_num = 20;
-  string slot_hash = 24;
-  string trx_id = 25;
+  uint64 block_num = 20;
+  bytes block_id = 24;
+  bytes trx_id = 25;
   uint32 trx_idx = 21;
   uint32 inst_idx = 22;
 }
