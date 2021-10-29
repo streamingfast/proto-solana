@@ -7,16 +7,16 @@ option go_package = "github.com/streamingfast/sf-solana/pb/sf/solana/codec/v1;pb
 import "google/protobuf/any.proto";
 
 message Block {
-  string id = 1;  // corresponds to the Slot id (or hash)
+  bytes id = 1;  // corresponds to the Slot id (or hash)
   uint64 number = 2; // corresponds to the Slot number for this block
   uint32 version = 3;
-  string previous_id = 4; // corresponds to the previous_blockhash, might skip some slots, so beware
+  bytes previous_id = 4; // corresponds to the previous_blockhash, might skip some slots, so beware
   uint64 previous_block = 5;
   uint64 genesis_unix_timestamp = 6;
   uint64 clock_unix_timestamp = 7;
   uint64 root_num = 8;
 
-  string last_entry_hash = 9;
+  bytes last_entry_hash = 9;
 
   repeated Transaction transactions = 10;
   uint32 transaction_count = 11;
@@ -36,7 +36,7 @@ message AccountChangesBundle {
 }
 
 message AccountChangesPerTrxIndex {
-  string TrxId = 1;
+  bytes TrxId = 1;
 
   // Maps to the index within the `repeated` field of the proto for
   // Transaction::instructions
@@ -51,20 +51,20 @@ message AccountChangesPerInstruction {
 message Transaction {
   // The transaction ID corresponds to the _first_
   // signature. Additional signatures are in `additional_signatures`.
-  string id = 1;
+  bytes id = 1;
 
   // Index from within a single Slot, deterministically ordered to the
   // best of our ability using the transaction ID as a sort key for
   // the batch of transactions executed in parallel.
   uint64 index = 2;
 
-  repeated string additional_signatures = 3;
+  repeated bytes additional_signatures = 3;
 
   MessageHeader header = 4;
   // From the original Message object
-  repeated string account_keys = 5;
+  repeated bytes account_keys = 5;
   // From the original Message object
-  string recent_blockhash = 6;
+  bytes recent_blockhash = 6;
 
   // What follows Once executed these can be set:
   repeated string log_messages = 7;
@@ -95,8 +95,8 @@ message MessageHeader  {
  */
 
 message Instruction {
-  string program_id = 3;
-  repeated string account_keys = 4;
+  bytes program_id = 3;
+  repeated bytes account_keys = 4;
   bytes data = 5;
 
   // What follows is execution trace data, could be empty for un-executed transactions.
@@ -113,13 +113,13 @@ message Instruction {
 }
 
 message BalanceChange {
-  string pubkey = 1;
+  bytes pubkey = 1;
   uint64 prev_lamports = 2;
   uint64 new_lamports = 3;
 }
 
 message AccountChange {
-  string pubkey = 1;
+  bytes pubkey = 1;
   bytes prev_data = 2;
   bytes new_data = 3;
   uint64 new_data_length = 4;
