@@ -4,8 +4,6 @@ package sf.solana.codec.v1;
 
 option go_package = "github.com/streamingfast/sf-solana/pb/sf/solana/codec/v1;pbcodec";
 
-import "google/protobuf/any.proto";
-
 message Block {
   bytes id = 1;  // corresponds to the Slot id (or hash)
   uint64 number = 2; // corresponds to the Slot number for this block
@@ -73,6 +71,9 @@ message Transaction {
 
   bool failed = 9;
   TransactionError error = 10;
+
+  uint64 begin_total_ordinal = 11;
+  uint64 end_total_ordinal = 12;
 }
 
 message MessageHeader  {
@@ -101,23 +102,27 @@ message Instruction {
 
   // What follows is execution trace data, could be empty for un-executed transactions.
 
-  uint32 ordinal = 6;
-  uint32 parent_ordinal = 7;
+  uint32 index = 6;
+  uint32 parent_index = 7;
   uint32 depth = 8;
 
   repeated BalanceChange balance_changes = 9;
   repeated AccountChange account_changes = 10;
 
-  repeated string logs = 11;
+  repeated Log logs = 11;
 
   bool failed = 15;
   InstructionError error = 16;
+
+  uint64 begin_total_ordinal = 17;
+  uint64 end_total_ordinal = 18;
 }
 
 message BalanceChange {
   bytes pubkey = 1;
   uint64 prev_lamports = 2;
   uint64 new_lamports = 3;
+  uint64 total_ordinal = 4;
 }
 
 message AccountChange {
@@ -125,6 +130,12 @@ message AccountChange {
   bytes prev_data = 2;
   bytes new_data = 3;
   uint64 new_data_length = 4;
+  uint64 total_ordinal = 5;
+}
+
+message Log {
+  string message = 1;
+  uint64 total_ordinal = 2;
 }
 
 message TransactionError {
