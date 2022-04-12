@@ -12,15 +12,11 @@ message Block {
   uint64 previous_block = 5;
   uint64 genesis_unix_timestamp = 6;
   uint64 clock_unix_timestamp = 7;
-  uint64 root_num = 8;
-
-  bytes last_entry_hash = 9;
-
-  repeated Transaction transactions = 10;
-  uint32 transaction_count = 11;
-
-  bool has_split_account_changes = 12;
-  string account_changes_file_ref = 13;
+  bytes last_entry_hash = 8;
+  repeated Transaction transactions = 9;
+  uint32 transaction_count = 10;
+  bool has_split_account_changes = 11;
+  string account_changes_file_ref = 12;
 }
 
 message Batch {
@@ -64,16 +60,14 @@ message Transaction {
   // From the original Message object
   bytes recent_blockhash = 6;
 
-  // What follows Once executed these can be set:
-  repeated string log_messages = 7;
   // Instructions, containing both top-level and nested transactions
-  repeated Instruction instructions = 8;
+  repeated Instruction instructions = 7;
 
-  bool failed = 9;
-  TransactionError error = 10;
+  bool failed = 8;
+  TransactionError error = 9;
 
-  uint64 begin_total_ordinal = 11;
-  uint64 end_total_ordinal = 12;
+  uint64 begin_ordinal = 10;
+  uint64 end_ordinal = 11;
 }
 
 message MessageHeader  {
@@ -114,15 +108,14 @@ message Instruction {
   bool failed = 15;
   InstructionError error = 16;
 
-  uint64 begin_total_ordinal = 17;
-  uint64 end_total_ordinal = 18;
+  uint64 begin_ordinal = 17;
+  uint64 end_ordinal = 18;
 }
 
 message BalanceChange {
   bytes pubkey = 1;
   uint64 prev_lamports = 2;
   uint64 new_lamports = 3;
-  uint64 total_ordinal = 4;
 }
 
 message AccountChange {
@@ -130,12 +123,11 @@ message AccountChange {
   bytes prev_data = 2;
   bytes new_data = 3;
   uint64 new_data_length = 4;
-  uint64 total_ordinal = 5;
 }
 
 message Log {
   string message = 1;
-  uint64 total_ordinal = 2;
+  uint64 ordinal = 2;
 }
 
 message TransactionError {
